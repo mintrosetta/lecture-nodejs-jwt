@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 function viewSignUp(req, res) {
     res.render('signup');
 }
@@ -6,11 +8,24 @@ function viewLogin(req, res) {
     res.render('login');
 }
 
-function signUp(req, res) {
-    res.send('new signup');
+async function signUp(req, res) {
+    const { email, password } = req.body;
+    
+    try {
+        const user = await User.create({
+            email: email,
+            password: password
+        });
+
+        res.status(201).json(user);
+    } catch (e) {
+        console.log(e);
+
+        res.status(400).send('user not created!');
+    }
 }
 
-function login(req, res) {
+async function login(req, res) {
     res.send('user login');
 }
 
